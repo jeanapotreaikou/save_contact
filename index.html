@@ -373,7 +373,34 @@
   <span id="toast-msg">Contact copié !</span>
 </div>
 
+ <button id="share-contact-btn">Partager / Enregistrer le contact</button>
+
 <script>
+
+ document.getElementById('share-contact-btn').addEventListener('click', async () => {
+    // Le texte brut de la vCard
+    const vcardText = `BEGIN:VCARD\nVERSION:3.0\nFN:Jean Dupont\nTEL;TYPE=CELL:+33612345678\nEND:VCARD`;
+    
+    // Création d'un fichier virtuel en mémoire
+    const file = new File([vcardText], "contact.vcf", { type: "text/vcard" });
+
+    // Vérifie si le navigateur du mobile supporte le partage de fichiers
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                files: [file],
+                title: 'Contact Jean Dupont',
+            });
+            console.log('Partage réussi !');
+        } catch (error) {
+            console.error('Erreur lors du partage :', error);
+        }
+    } else {
+        alert("Votre navigateur ne supporte pas cette fonctionnalité.");
+        // Vous pouvez mettre ici la Méthode 1 en solution de repli (fallback)
+    }
+});
+ 
 const contact = {
   firstName: 'Sophie',
   lastName: 'Aubry',
