@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enregistrer le contact</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1410;
+    --ink-mid: #6b5f55;
+    --ink-light: #c4b9b0;
+    --paper: #f7f3ef;
+    --paper-dark: #ece5dd;
+    --accent: #c4602a;
+    --accent-light: #f0ddd1;
+    --success: #2d6a4f;
+    --success-light: #d8f3dc;
+    --radius: 16px;
+    --shadow: 0 2px 24px rgba(26,20,16,0.10);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--ink);
+  }
+
+  .page {
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--ink-mid);
+  }
+
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .card-hero {
+    background: var(--ink);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-hero::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(196,96,42,0.15);
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-title {
+    font-size: 13px;
+    color: var(--ink-light);
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-body {
+    padding: 1.75rem 2rem;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--paper-dark);
+  }
+
+  .field:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .field-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .field-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--ink-mid);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .field-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .field-label {
+    font-size: 11px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+
+  .field-value {
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .actions {
+    padding: 1.5rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s, opacity 0.15s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: #b05523;
+  }
+
+  .btn-secondary {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--paper-dark);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--paper-dark);
+  }
+
+  .btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--success);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .toast svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .api-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    background: var(--success-light);
+    color: var(--success);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  .method-info {
+    padding: 0 2rem 1.5rem;
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  .method-info strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <p class="eyebrow">Carte de visite numérique</p>
+
+  <div class="card">
+    <div class="card-hero">
+      <div class="avatar" id="avatar">SA</div>
+      <h1 class="contact-name" id="contact-name">Sophie Aubry</h1>
+      <p class="contact-title" id="contact-title">Directrice Design · Atelier Forma</p>
+    </div>
+
+    <div class="card-body">
+      <div class="field">
+        <div class="field-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.6 11.8a19.79 19.79 0 01-3.07-8.67A2 2 0 013.51 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.73a16 16 0 006.29 6.29l1.9-1.9a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="field-content">
+          <p class="field-label">Téléphone</p>
+          <p class="field-value" id="phone">+33 6 12 34 56 78</p>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="field-content">
+          <p class="field-label">E-mail</p>
+          <p class="field-value" id="email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="55267b342037272c15342130393c3027333a2738347b3327">[email&#160;protected]</a></p>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </div>
+        <div class="field-content">
+          <p class="field-label">Site web</p>
+          <p class="field-value" id="website">atelierforma.fr</p>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="field-content">
+          <p class="field-label">Adresse</p>
+          <p class="field-value" id="address">12 rue du Faubourg, Paris 75011</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-info" id="method-info"></div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-share" onclick="shareVCard()" style="display:none;">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Partager via…
+        <span class="api-badge">Web Share</span>
+      </button>
+      <a class="btn btn-primary" id="btn-mobile" href="#" onclick="openVCardMobile(event)">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Enregistrer le contact
+      </a>
+      <button class="btn btn-secondary" onclick="downloadVCard()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger le fichier .vcf
+      </button>
+      <button class="btn btn-secondary" onclick="copyVCard()">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copier la vCard
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Contact copié !</span>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const contact = {
+  firstName: 'Sophie',
+  lastName: 'Aubry',
+  org: 'Atelier Forma',
+  title: 'Directrice Design',
+  phone: '+33612345678',
+  email: 's.aubry@atelierforma.fr',
+  website: 'https://atelierforma.fr',
+  address: '12 rue du Faubourg Saint-Antoine;Paris;75011;France',
+  note: 'Rencontré(e) via carte de visite numérique',
+};
+
+function buildVCard() {
+  return [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    `FN:${contact.firstName} ${contact.lastName}`,
+    `N:${contact.lastName};${contact.firstName};;;`,
+    `ORG:${contact.org}`,
+    `TITLE:${contact.title}`,
+    `TEL;TYPE=CELL:${contact.phone}`,
+    `EMAIL;TYPE=WORK:${contact.email}`,
+    `URL:${contact.website}`,
+    `ADR;TYPE=WORK:;;${contact.address}`,
+    `NOTE:${contact.note}`,
+    'END:VCARD'
+  ].join('\r\n');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function downloadVCard() {
+  const blob = new Blob([buildVCard()], { type: 'text/vcard;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${contact.firstName}_${contact.lastName}.vcf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Fichier .vcf téléchargé');
+}
+
+function copyVCard() {
+  const vcard = buildVCard();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(vcard).then(() => showToast('vCard copiée dans le presse-papiers'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = vcard;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('vCard copiée dans le presse-papiers');
+  }
+}
+
+function isMobile() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+function openVCardMobile(e) {
+  e.preventDefault();
+  const vcf = buildVCard();
+  const blob = new Blob([vcf], { type: 'text/vcard;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  if (isMobile()) {
+    window.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  } else {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${contact.firstName}_${contact.lastName}.vcf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('Fichier .vcf téléchargé — ouvrez-le pour importer');
+  }
+}
+
+async function shareVCard() {
+  const vcf = buildVCard();
+  const file = new File([vcf], `${contact.firstName}_${contact.lastName}.vcf`, { type: 'text/vcard' });
+  try {
+    await navigator.share({ files: [file], title: `${contact.firstName} ${contact.lastName}` });
+  } catch (e) {
+    if (e.name !== 'AbortError') showToast('Partage annulé ou non disponible');
+  }
+}
+
+function detectCapabilities() {
+  const info = document.getElementById('method-info');
+  const btnShare = document.getElementById('btn-share');
+  const btnMobile = document.getElementById('btn-mobile');
+
+  const testFile = new File(['BEGIN:VCARD\r\nEND:VCARD'], 'test.vcf', { type: 'text/vcard' });
+  const hasShare = navigator.canShare && navigator.canShare({ files: [testFile] });
+  const mobile = isMobile();
+
+  if (hasShare) {
+    btnShare.style.display = 'flex';
+    btnMobile.style.display = 'none';
+    info.innerHTML = `<p><strong>Partage natif disponible.</strong> "Partager via…" ouvre le menu de partage de votre OS — choisissez Contacts pour enregistrer directement, sans aucun téléchargement.</p>`;
+  } else if (mobile) {
+    info.innerHTML = `<p><strong>Sur mobile</strong>, le bouton ouvre le dialogue natif iOS ou Android — champs pré-remplis, il suffit de confirmer.</p>`;
+  } else {
+    btnMobile.style.display = 'none';
+    info.innerHTML = `<p><strong>Sur ordinateur</strong>, téléchargez le fichier .vcf puis importez-le dans votre répertoire ou client mail.</p>`;
+  }
+}
+
+detectCapabilities();
+</script>
+</body>
+</html>
